@@ -1,0 +1,28 @@
+From a6afea731dfce02314f2f946f1b31fb9ab2839ee Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Tue, 17 Feb 2015 21:06:15 +0100
+Subject: [PATCH] dgnc: Cleanup coding style
+
+This fixes the following checkpatch.pl warnings:
+WARNING: printk() should include KERN_ facility level
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_driver.c b/drivers/staging/dgnc/dgnc_driver.c
+index f177d3a..45c584c 100644
+--- a/drivers/staging/dgnc/dgnc_driver.c
++++ b/drivers/staging/dgnc/dgnc_driver.c
+@@ -364,7 +364,7 @@ static void dgnc_cleanup_board(struct dgnc_board *brd)
+
+		spin_lock_irqsave(&dgnc_global_lock, flags);
+		brd->msgbuf = NULL;
+-		printk("%s", brd->msgbuf_head);
++		dev_dbg(&brd->pdev->dev, "%s", brd->msgbuf_head);
+		kfree(brd->msgbuf_head);
+		brd->msgbuf_head = NULL;
+		spin_unlock_irqrestore(&dgnc_global_lock, flags);
+--
+1.9.1
