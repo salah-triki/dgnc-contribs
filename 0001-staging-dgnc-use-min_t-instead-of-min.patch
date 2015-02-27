@@ -1,0 +1,29 @@
+From 14d78abf574e06db9e8491f57a72cc7b555d68e3 Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Sun, 22 Feb 2015 20:30:46 +0100
+Subject: [PATCH] staging: dgnc: use min_t instead of min
+
+This fixes the following checkpatch.pl warnings:
+WARNING: min() should probably be min_t()
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_neo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_neo.c b/drivers/staging/dgnc/dgnc_neo.c
+index c9a8a98..1268aa9 100644
+--- a/drivers/staging/dgnc/dgnc_neo.c
++++ b/drivers/staging/dgnc/dgnc_neo.c
+@@ -1203,7 +1203,7 @@ static void neo_copy_data_from_uart_to_queue(struct channel_t *ch)
+ 		 * IBM pSeries platform.
+ 		 * 15 bytes max appears to be the magic number.
+ 		 */
+-		n = min((uint) n, (uint) 12);
++		n = min_t(uint, n, 12);
+ 
+ 		/*
+ 		 * Since we are grabbing the linestatus register, which
+-- 
+1.9.1
+
