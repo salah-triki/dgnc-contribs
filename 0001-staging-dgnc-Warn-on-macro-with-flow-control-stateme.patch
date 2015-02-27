@@ -1,0 +1,148 @@
+From 20c5631b24aa6d97b860a8716f9ab0d9a6c4d4f6 Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Fri, 27 Feb 2015 10:45:16 +0100
+Subject: [PATCH v2] staging: dgnc: Warn on macro with flow control statements
+
+This fixes the following checkpatch.pl warnings:
+WARNING: Macros with flow control statements should be avoided.
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_sysfs.c | 38 ++++++++++++--------------------------
+ 1 file changed, 12 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_sysfs.c b/drivers/staging/dgnc/dgnc_sysfs.c
+index 2fd34ca..cffe542 100644
+--- a/drivers/staging/dgnc/dgnc_sysfs.c
++++ b/drivers/staging/dgnc/dgnc_sysfs.c
+@@ -106,27 +106,13 @@ void dgnc_remove_driver_sysfiles(struct pci_driver *dgnc_driver)
+ }
+ 
+ 
+-#define DGNC_VERIFY_BOARD(p, bd)				\
+-	do {							\
+-		if (!p)						\
+-			return 0;				\
+-								\
+-		bd = dev_get_drvdata(p);			\
+-		if (!bd || bd->magic != DGNC_BOARD_MAGIC)	\
+-			return 0;				\
+-		if (bd->state != BOARD_READY)			\
+-			return 0;				\
+-	} while (0)
+-
+-
+-
+ static ssize_t dgnc_vpd_show(struct device *p, struct device_attribute *attr, char *buf)
+ {
+ 	struct dgnc_board *bd;
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	count += sprintf(buf + count, "\n      0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F");
+ 	for (i = 0; i < 0x40 * 2; i++) {
+@@ -145,7 +131,7 @@ static ssize_t dgnc_serial_number_show(struct device *p, struct device_attribute
+ 	struct dgnc_board *bd;
+ 	int count = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	if (bd->serial_num[0] == '\0')
+ 		count += sprintf(buf + count, "<UNKNOWN>\n");
+@@ -163,7 +149,7 @@ static ssize_t dgnc_ports_state_show(struct device *p, struct device_attribute *
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count,
+@@ -181,7 +167,7 @@ static ssize_t dgnc_ports_baud_show(struct device *p, struct device_attribute *a
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count +=  snprintf(buf + count, PAGE_SIZE - count,
+@@ -198,7 +184,7 @@ static ssize_t dgnc_ports_msignals_show(struct device *p, struct device_attribut
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		if (bd->channels[i]->ch_open_count) {
+@@ -226,7 +212,7 @@ static ssize_t dgnc_ports_iflag_show(struct device *p, struct device_attribute *
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %x\n",
+@@ -243,7 +229,7 @@ static ssize_t dgnc_ports_cflag_show(struct device *p, struct device_attribute *
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %x\n",
+@@ -260,7 +246,7 @@ static ssize_t dgnc_ports_oflag_show(struct device *p, struct device_attribute *
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %x\n",
+@@ -277,7 +263,7 @@ static ssize_t dgnc_ports_lflag_show(struct device *p, struct device_attribute *
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %x\n",
+@@ -294,7 +280,7 @@ static ssize_t dgnc_ports_digi_flag_show(struct device *p, struct device_attribu
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %x\n",
+@@ -311,7 +297,7 @@ static ssize_t dgnc_ports_rxcount_show(struct device *p, struct device_attribute
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %ld\n",
+@@ -328,7 +314,7 @@ static ssize_t dgnc_ports_txcount_show(struct device *p, struct device_attribute
+ 	int count = 0;
+ 	int i = 0;
+ 
+-	DGNC_VERIFY_BOARD(p, bd);
++	bd = dev_get_drvdata(p);
+ 
+ 	for (i = 0; i < bd->nasync; i++) {
+ 		count += snprintf(buf + count, PAGE_SIZE - count, "%d %ld\n",
+-- 
+1.9.1
+
