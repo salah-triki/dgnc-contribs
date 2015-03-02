@@ -1,0 +1,44 @@
+From 2a6e5f9355457b28a7d1d26673e41364428cd12f Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Mon, 2 Mar 2015 00:08:07 +0100
+Subject: [PATCH] staging: dgnc: Remove unnecessary checks
+
+This patch removes unnecessary checks of unit magic, channel magic, board
+magic and board state.
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_sysfs.c | 14 --------------
+ 1 file changed, 14 deletions(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_sysfs.c b/drivers/staging/dgnc/dgnc_sysfs.c
+index 2fd34ca..f420590 100644
+--- a/drivers/staging/dgnc/dgnc_sysfs.c
++++ b/drivers/staging/dgnc/dgnc_sysfs.c
+@@ -384,23 +384,9 @@ void dgnc_remove_ports_sysfiles(struct dgnc_board *bd)
+
+ static ssize_t dgnc_tty_state_show(struct device *d, struct device_attribute *attr, char *buf)
+ {
+-	struct dgnc_board *bd;
+-	struct channel_t *ch;
+ 	struct un_t *un;
+
+-	if (!d)
+-		return 0;
+ 	un = dev_get_drvdata(d);
+-	if (!un || un->magic != DGNC_UNIT_MAGIC)
+-		return 0;
+-	ch = un->un_ch;
+-	if (!ch || ch->magic != DGNC_CHANNEL_MAGIC)
+-		return 0;
+-	bd = ch->ch_bd;
+-	if (!bd || bd->magic != DGNC_BOARD_MAGIC)
+-		return 0;
+-	if (bd->state != BOARD_READY)
+-		return 0;
+
+ 	return snprintf(buf, PAGE_SIZE, "%s", un->un_open_count ? "Open" : "Closed");
+ }
+--
+1.9.1
+
