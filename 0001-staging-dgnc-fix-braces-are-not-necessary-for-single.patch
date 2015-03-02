@@ -1,0 +1,32 @@
+From 8bee2058a39316ab0f937be2702ecacc6b5593b8 Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Sun, 1 Mar 2015 23:12:37 +0100
+Subject: [PATCH] staging: dgnc: fix braces {} are not necessary for single
+ statement blocks
+
+This patch fixes the following checkpatch.pl warning:
+braces {} are not necessary for single statement blocks
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_tty.c | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_tty.c b/drivers/staging/dgnc/dgnc_tty.c
+index f81a375..8179342 100644
+--- a/drivers/staging/dgnc/dgnc_tty.c
++++ b/drivers/staging/dgnc/dgnc_tty.c
+@@ -886,10 +886,6 @@ void dgnc_check_queue_flow_control(struct channel_t *ch)
+ 				ch->ch_stops_sent++;
+ 			}
+ 		}
+-		/* No FLOW */
+-		else {
+-			/* Empty... Can't do anything about the impending overflow... */
+-		}
+ 	}
+
+ 	/*
+--
+1.9.1
+
