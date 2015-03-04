@@ -1,0 +1,28 @@
+From 6350d0692601bd8f7d346c77717bbe791b4113ba Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Wed, 4 Mar 2015 01:32:10 +0100
+Subject: [PATCH] Staging: dgnc: Fix return value code of dgnc_start
+
+Return the failure code from register_chrdev instead of -ENXIO.
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_driver.c b/drivers/staging/dgnc/dgnc_driver.c
+index f177d3a..f9f5e83 100644
+--- a/drivers/staging/dgnc/dgnc_driver.c
++++ b/drivers/staging/dgnc/dgnc_driver.c
+@@ -253,7 +253,7 @@ static int dgnc_start(void)
+ 	rc = register_chrdev(0, "dgnc", &dgnc_BoardFops);
+ 	if (rc <= 0) {
+ 		pr_err(DRVSTR ": Can't register dgnc driver device (%d)\n", rc);
+-		return -ENXIO;
++		return rc;
+ 	}
+ 	dgnc_Major = rc;
+
+--
+1.9.1
+

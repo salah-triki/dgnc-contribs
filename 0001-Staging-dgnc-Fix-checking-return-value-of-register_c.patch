@@ -1,0 +1,28 @@
+From 2a2fa816b7eebece957b848b31140097442b3fb0 Mon Sep 17 00:00:00 2001
+From: Salah Triki <salah.triki@acm.org>
+Date: Wed, 4 Mar 2015 01:05:44 +0100
+Subject: [PATCH] Staging: dgnc: Fix checking return value of register_chrdev
+
+The failure code is negative. So check <0 instead of <=0.
+
+Signed-off-by: Salah Triki <salah.triki@acm.org>
+---
+ drivers/staging/dgnc/dgnc_driver.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/staging/dgnc/dgnc_driver.c b/drivers/staging/dgnc/dgnc_driver.c
+index f177d3a..4341125 100644
+--- a/drivers/staging/dgnc/dgnc_driver.c
++++ b/drivers/staging/dgnc/dgnc_driver.c
+@@ -251,7 +251,7 @@ static int dgnc_start(void)
+ 	 * Register management/dpa devices
+ 	 */
+ 	rc = register_chrdev(0, "dgnc", &dgnc_BoardFops);
+-	if (rc <= 0) {
++	if (rc < 0) {
+ 		pr_err(DRVSTR ": Can't register dgnc driver device (%d)\n", rc);
+ 		return -ENXIO;
+ 	}
+--
+1.9.1
+
